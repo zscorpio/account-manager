@@ -1,0 +1,10 @@
+node_modules
+dist
+out
+*.log*
+.idea
+/.vscode
+/cache
+/package-lock.json
+/userData
+.DS_Store
