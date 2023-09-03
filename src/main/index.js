@@ -71,5 +71,11 @@ app.on("window-all-closed", () => {
 	}
 });
 
+app.once("window-all-closed", app.quit);
+app.once("before-quit", () => {
+	const windows = BrowserWindow.getAllWindows();
+	windows.forEach((win) => win.removeAllListeners("close"));
+});
+
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
