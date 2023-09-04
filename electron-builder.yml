@@ -45,5 +45,10 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  owner: zscorpio
+  repo: account-manager
+releaseInfo:
+  releaseNotes: |
+    这是更新日志
+    测试测试

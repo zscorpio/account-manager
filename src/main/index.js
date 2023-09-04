@@ -3,6 +3,7 @@ import { join } from "path";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import RouterService from "./service/RouterService";
+import UpdateService from "./service/UpdateService";
 
 function createWindow() {
 	// Create the browser window.
@@ -61,6 +62,8 @@ app.whenReady().then(() => {
 
 	RouterService.init();
 });
+
+UpdateService.init();
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
