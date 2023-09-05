@@ -26,6 +26,11 @@ export default {
 		ipcMain.handle(API.system.dialog, async () => {
 			return await SystemService.dialog();
 		});
+
+		ipcMain.handle(API.system.dialogFile, async () => {
+			return await SystemService.dialog("openFile");
+		});
+
 		ipcMain.handle(API.system.openFolder, async (event, data) => {
 			return await SystemService.openFolder(data);
 		});

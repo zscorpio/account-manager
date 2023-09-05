@@ -1,9 +1,9 @@
 const { dialog, shell } = require("electron");
 
 export default {
-	dialog: async function () {
+	dialog: async function (propertie = "openDirectory") {
 		const { canceled, filePaths } = await dialog.showOpenDialog({
-			properties: ["openDirectory", "createDirectory"]
+			properties: ["createDirectory", "treatPackageAsDirectory", propertie]
 		});
 		if (!canceled) {
 			return filePaths[0];

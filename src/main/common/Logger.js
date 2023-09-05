@@ -7,7 +7,7 @@ logger.transports.file.level = "info";
 logger.transports.file.maxSize = 1002430; // 10M
 logger.transports.file.format = "[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}]{scope} {text}";
 logger.transports.file.resolvePathFn = () => {
-	return path.join(FsUtils.getRootPath(), `${DateUtils.formatYMD()}.log`);
+	return path.join(FsUtils.getRootPath(), `log/${DateUtils.formatYMD()}.log`);
 };
 
 export default {

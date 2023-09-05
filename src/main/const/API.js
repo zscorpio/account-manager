@@ -10,6 +10,7 @@ export default {
 	},
 	system: {
 		dialog: "system/dialog",
+		dialogFile: "system/dialogFile",
 		openFolder: "system/openFolder"
 	}
 };

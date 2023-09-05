@@ -20,6 +20,9 @@ export default {
 			}
 		}
 
+		let systemConfigFile = FsUtils.getSystemConfigFile();
+		let systemConfig = FsUtils.readFileSync(systemConfigFile);
+
 		let options = {
 			headless: false,
 			defaultViewport: null,
@@ -38,6 +41,9 @@ export default {
 		FsUtils.deleteUserDataLock(uniqueId);
 		if (headless) {
 			options.headless = "new";
+		}
+		if (systemConfig.executablePath) {
+			options.executablePath = systemConfig.executablePath;
 		}
 		const browser = await puppeteer.launch(options);
 		global.__browser[uniqueId] = browser;
