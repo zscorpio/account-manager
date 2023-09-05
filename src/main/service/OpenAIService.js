@@ -6,6 +6,7 @@ import fs from "fs";
 import axios from "axios";
 import PuppeteerUtils from "../utils/PuppeteerUtils";
 import CalUtils from "../utils/CalUtils";
+import log from "../common/Logger";
 
 class OpenAIService extends BaseAccountService {
 	async openHomePage() {
@@ -19,11 +20,11 @@ class OpenAIService extends BaseAccountService {
 	}
 
 	async login(headless = false) {
-		let browser;
+		// let browser;
 		try {
 			const puppeteerResult = await PuppeteerUtils.start(this.config.uniqueId, headless);
 			let page = puppeteerResult.page;
-			browser = puppeteerResult.browser;
+			// browser = puppeteerResult.browser;
 			let { account, password } = this.config;
 			let cacheFile = FsUtils.getCacheFile(this.config.uniqueId);
 			await page.goto("https://platform.openai.com/login?launch");
@@ -57,7 +58,7 @@ class OpenAIService extends BaseAccountService {
 			FsUtils.writeFileSync(cacheFile, JSON.stringify(cacheInfo));
 			return authorization;
 		} catch (e) {
-			console.log(e);
+			log.error("OpenAIService#login", e);
 		} finally {
 			// if (browser != null) {
 			// 	browser.close();
@@ -88,27 +89,42 @@ class OpenAIService extends BaseAccountService {
 			authorization = await this.login(true);
 		}
 		let result = await this.getBalance(account, password, authorization);
-		console.log(result);
+		log.info("OpenAIService#updateData", result);
+
 		return result;
 	}
 
 	async getBalance(account, password, authorization) {
 		const subscriptionData = await this.getSubscription(authorization);
-		const usageData = await this.getUsageData(authorization);
-		if (subscriptionData != null && usageData != null) {
-			return this.genResponse(account, subscriptionData, usageData);
+		const creditGrantsData = await this.getCreditGrants(authorization);
+		if (subscriptionData != null && creditGrantsData != null) {
+			return await this.genResponse(account, subscriptionData, creditGrantsData, authorization);
 		} else {
 			return "fail";
 		}
 	}
 
-	async getUsageData(authorization) {
+	async getCreditGrants(authorization) {
+		try {
+			const creditGrantsData = await axios.get("https://api.openai.com/dashboard/billing/credit_grants", {
+				timeout: 5000,
+				headers: {
+					authorization: authorization
+				}
+			});
+			return creditGrantsData.data;
+		} catch (e) {
+			return null;
+		}
+	}
+
+	async getUsageData(authorization, startDate = DateUtils.formatMonthStartDate("America/New_York")) {
 		try {
 			const usageData = await axios.get(
 				"https://api.openai.com/dashboard/billing/usage?end_date=" +
 					DateUtils.formatNextMonthStartDate("America/New_York") +
 					"&start_date=" +
-					DateUtils.formatMonthStartDate("America/New_York"),
+					startDate,
 				{
 					timeout: 5000,
 					headers: {
@@ -136,16 +152,24 @@ class OpenAIService extends BaseAccountService {
 		}
 	}
 
-	genResponse(account, subscriptionData, usageData) {
-		let total = 5;
-		if (subscriptionData.has_payment_method) {
-			total = 120;
+	async genResponse(account, subscriptionData, creditGrantsData, authorization) {
+		let startDate = DateUtils.formatMonthStartDate("America/New_York");
+		let total = subscriptionData.hard_limit_usd;
+		if (subscriptionData.billing_mechanism === "advance" || (total <= 6 && !subscriptionData.has_credit_card)) {
+			total = creditGrantsData.total_granted;
+			startDate = DateUtils.formatPreMonthStartDate("America/New_York", 2);
 		}
 		let usage = 0;
+
+		const usageData = await this.getUsageData(authorization, startDate);
+
 		if (usageData.total_usage) {
 			usage = (usageData.total_usage / 100).toFixed(2);
 		}
 		let left = (total - usage).toFixed(2);
+		if (left <= 0) {
+			left = 0;
+		}
 		const result = {
 			total,
 			usage,

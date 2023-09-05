@@ -4,6 +4,7 @@ import FsUtils from "../utils/FsUtils";
 import fs from "fs";
 import path from "path";
 import BaseAccountService from "./BaseAccountService";
+import log from "../common/Logger";
 
 let accountMap = {};
 
@@ -22,7 +23,7 @@ function getAllAccountConfig(directory) {
 				const fileContent = FsUtils.readFileSync(filePath);
 				accountConfig.push(fileContent);
 			} catch (error) {
-				console.error(`读取文件 ${filePath} 失败：`, error);
+				log.error(`读取文件 ${filePath} 失败：`, error);
 			}
 		}
 	});

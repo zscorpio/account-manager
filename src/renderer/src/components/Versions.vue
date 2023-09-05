@@ -10,7 +10,6 @@ export default {
 	},
 	methods: {
 		goToHome: function () {
-			console.log("cc");
 			this.$router.push("/home");
 		}
 	}

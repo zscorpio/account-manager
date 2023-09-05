@@ -1,6 +1,7 @@
 // const log = require("../common/LogConfig");
 import PuppeteerUtils from "../utils/PuppeteerUtils";
 import FsUtils from "../utils/FsUtils";
+import log from "../common/Logger";
 
 class BaseAccountService {
 	constructor(config) {
@@ -22,7 +23,7 @@ class BaseAccountService {
 				await this.login();
 			}
 		} catch (error) {
-			console.warn("BaseAccountService#openHomePage exception, ", this.config.uniqueId, error.message);
+			log.warn("BaseAccountService#openHomePage exception, ", this.config.uniqueId, error.message);
 		}
 	}
 

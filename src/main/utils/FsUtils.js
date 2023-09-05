@@ -53,7 +53,6 @@ export default {
 	},
 	initDemoData() {
 		const accountConfigPath = this.getAccountConfigPath();
-		console.log("demoDatademoData", demoData);
 		this.writeFileSync(accountConfigPath + "/demoData.json", JSON.stringify(demoData));
 	},
 	getRootPath() {

@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer";
 import FsUtils from "./FsUtils";
+import log from "../common/Logger";
 
 global.__browser = {};
 
@@ -15,11 +16,9 @@ export default {
 					page
 				};
 			} catch (e) {
-				console.log(e);
+				log.error("PuppeteerUtil#start error", e);
 			}
 		}
-
-		console.log("FsUtils.getUserDataPath(uniqueId)", FsUtils.getUserDataPath(uniqueId));
 
 		let options = {
 			headless: false,

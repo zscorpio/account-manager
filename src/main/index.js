@@ -2,8 +2,10 @@ import { app, BrowserWindow, shell } from "electron";
 import { join } from "path";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import log from "./common/Logger";
 import RouterService from "./service/RouterService";
-import UpdateService from "./service/UpdateService";
+// import UpdateService from "./service/UpdateService";
+import FsUtils from "./utils/FsUtils";
 
 function createWindow() {
 	// Create the browser window.
@@ -43,7 +45,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
 	// Set app user model id for windows
-	electronApp.setAppUserModelId("com.electron");
+	electronApp.setAppUserModelId("one.zscorpio");
 
 	// Default open or close DevTools by F12 in development
 	// and ignore CommandOrControl + R in production.
@@ -63,7 +65,7 @@ app.whenReady().then(() => {
 	RouterService.init();
 });
 
-UpdateService.init();
+// UpdateService.init();
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

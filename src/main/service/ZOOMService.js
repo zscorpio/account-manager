@@ -1,6 +1,7 @@
 import BaseAccountService from "./BaseAccountService";
 import SysUtils from "../utils/SysUtils";
 import PuppeteerUtils from "../utils/PuppeteerUtils";
+import log from "../common/Logger";
 
 class ZOOMService extends BaseAccountService {
 	async openHomePage() {
@@ -14,11 +15,11 @@ class ZOOMService extends BaseAccountService {
 	}
 
 	async login(headless = false) {
-		let browser;
+		// let browser;
 		try {
 			const puppeteerResult = await PuppeteerUtils.start(this.config.uniqueId, headless);
 			let page = puppeteerResult.page;
-			browser = puppeteerResult.browser;
+			// browser = puppeteerResult.browser;
 			let { account, password, homePage } = this.config;
 			await page.goto(homePage);
 			const emailInput = await page.waitForSelector("#email");
@@ -30,7 +31,7 @@ class ZOOMService extends BaseAccountService {
 			await page.waitForSelector(".sidebar-menu");
 			await page.goto(homePage);
 		} catch (e) {
-			console.log(e);
+			log.error("ZOOMService#login error", e);
 		} finally {
 			// if (browser != null) {
 			// 	browser.close();

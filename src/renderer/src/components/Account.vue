@@ -71,8 +71,7 @@ export default {
 			}
 		},
 		updateData: async function (data) {
-			const result = await window.request.invoke(window.API.data.updateData, data);
-			console.log(result);
+			await window.request.invoke(window.API.data.updateData, data);
 			location.reload();
 		},
 		openHomePage: async function (data) {
