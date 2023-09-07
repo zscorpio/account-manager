@@ -1,6 +1,6 @@
 {
   "name": "account-manager",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "多账号切换管理器",
   "main": "./out/main/index.js",
   "author": "zsw.scorpio@gmail.com",
