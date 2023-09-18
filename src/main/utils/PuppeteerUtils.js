@@ -27,14 +27,15 @@ export default {
 			headless: false,
 			defaultViewport: null,
 			ignoreHTTPSErrors: false,
-			ignoreDefaultArgs: ["--enable-automation"],
+			ignoreDefaultArgs: ["--enable-automation", "--disable-extensions"],
 			userDataDir: FsUtils.getUserDataPath(uniqueId),
 			args: [
 				"--no-sandbox",
 				"--lang=zh-CN",
 				"--disable-blink-features=AutomationControlled",
 				// `--window-size=${1440},${1000}`
-				"--start-maximized"
+				"--start-maximized",
+				"--enable-easy-off-store-extension-install"
 			]
 			// executablePath: '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
 		};
